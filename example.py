@@ -1,4 +1,5 @@
 from gj_api import GoJauntlyApi
+import json
 
 client = GoJauntlyApi(
     key_id="[KEY ID]",
@@ -8,29 +9,22 @@ client = GoJauntlyApi(
 
 def example_curated_walk_search():
     response = client.curated_walk_search(data={
-        "_lon": -4.081806,
-        "version": 11,
-        "_radius": 2,
-        "amount": 25,
-        "_lat": 52.414337,
-        "premiumLevel": 1,
-        "visibility": -50,
-        "attributes": [],
-        "username": "gojauntly",
-        "types": [
-            "normal",
-            "track"
-        ],
+        # "lat": 52.414337,
+        # "lon": -4.081806,
+        "postcode" : "W1J 9BR",
+        "radius": 2,
+        # "username": "gojauntly",
+        # "sort": "latest",
         "page": 0,
-        "premiumLevelOperator": "<=",
-        "sort": "rankHighest"
+        "amount": 25,
     })
-    print(response)
+    print(json.dumps(response))
     
 def example_curated_walk_retrieve():
-    response = client.curated_walk_retrieve(id="14312567863811772911", data={"shallow": False})
-    print(response)
-    
+    response = client.curated_walk_retrieve(id="1260831589854876137", data={
+        "includeSteps": True
+    })
+    print(json.dumps(response))
 
 def example_dynamic_routes_route():
     response = client.dynamic_routes_route(data={
@@ -46,12 +40,46 @@ def example_dynamic_routes_route():
         ],
         "points_encoded" : True,
         "details" : [
-            "potentially_unsuitable"
+            "potentially_unsuitable",
+            "potentially_private",
+            "road_environment"
         ],
         "instructions" : True,
         "profile" : "greenest",
         "max_paths" : 2
     })
-    print(response)
+    print(json.dumps(response))
+    
+def example_dynamic_routes_circular():
+    response = client.dynamic_routes_circular(data={
+        "start_point": [51.5073386, -0.1412785], # OR postcode
+        # "postcode" : "W1J 9BR",
+        "ditance": 2000,
+        "points_encoded" : True,
+        "details" : [
+            "potentially_unsuitable",
+            "potentially_private",
+            "road_environment"
+        ],
+        "profile" : "greenest",
+        "max_paths" : 2
+    })
+    print(json.dumps(response))
+    
+def example_dynamic_routes_circular_collection():
+    response = client.dynamic_routes_circular_collection(data={
+        "categorise": True, # If to return routes in categories like parks and woodland, where available
+        "start_point": [51.5073386, -0.1412785], # OR postcode
+        # "postcode" : "W1J 9BR",
+        "distances": [1000, 2000, 4000],
+        "points_encoded" : True,
+        "details" : [
+            "potentially_unsuitable",
+            "potentially_private",
+            "road_environment"
+        ],
+        "profile" : "greenest"
+    })
+    print(json.dumps(response))
 
-example_dynamic_routes_route()
+example_curated_walk_retrieve()
